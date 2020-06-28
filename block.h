@@ -7,8 +7,8 @@
 typedef struct block {
   char *bytes;
   uint8_t valid;
-  uint8_t dirty;
   uint8_t tag; 
+  uint8_t lastused;
 } block_t;
 
 /**
@@ -57,9 +57,14 @@ uint8_t block_get_tag(block_t *self);
 uint8_t block_is_valid(block_t *self);
 
 /**
- * Devuelve si el boque fue modificado o no
+ * Agrega uno a last_used
+ **/
+void block_add_not_used(block_t *self);
+
+/**
+ * Settea el lastused en cero
 */
-uint8_t block_is_dirty(block_t *self);
+void block_set_used(block_t *self);
 
 /**
  * Settea el byte de valid en 1

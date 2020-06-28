@@ -117,17 +117,9 @@ unsigned char read_byte(unsigned int address) {
     unsigned int way = search_block_position(cache->sets[set], tag);
     if (search_block_position(cache->sets[set], tag) == -1) {
         cache->miss++;
-        // Si no esta, lo traigo de memoria y devuelvo el dato despues
-        block_t *last = set_get_last_block(cache->sets[set]);
-        if (last != NULL) {
-            // Me fijo si el que tengo reemplazar, esta dirty o no, si esta lo escribo a memory
-            if (block_is_dirty(last)) {
-                memory_write_block(cache->pri_mem, last, address, tag);
-            }
-        }
         // Traigo el que necesito de memoria
         block_t *block = memory_get_block(cache->pri_mem, get_block_num(address));
-        way = get_way_last_block(cache->sets[set]);
+        way = get_way_least_used_block(cache->sets[set]);
         set_insert_block(cache->sets[set], block, way, tag);
     } else {
         cache->hits++;
@@ -143,26 +135,12 @@ void write_byte(unsigned int address, unsigned char value) {
     unsigned int offset = get_offset(address);
     unsigned int way = search_block_position(cache->sets[set], tag);
     if (way == -1) {
-        cache->miss++;
-        if (set_is_full(cache->sets[set])) {
-            block_t *last = set_get_last_block(cache->sets[set]);
-            if (last != NULL) {
-                // Me fijo si el que tengo reemplazar, esta dirty o no, si esta lo escribo a memory
-                if (block_is_dirty(last)) {
-                    memory_write_block(cache->pri_mem,last,address,tag);
-                }
-            }
-        }        
-        // Traigo el que necesito de memoria
-        way = get_way_last_block(cache->sets[set]);
-        block_t *block = memory_get_block(cache->pri_mem, get_block_num(address));
-        block_write_byte(block,value,offset);
-        set_insert_block(cache->sets[set], block, way, tag);
+        cache->miss++;    
     } else {
-        // Escribo y nada mas, cambio el dirty a 1
         cache->hits++;
         set_write_block(cache->sets[set], way, offset, value);
     }
+    memory_write_byte(cache->pri_mem,address,value);        
 }
 
 float get_miss_rate() {

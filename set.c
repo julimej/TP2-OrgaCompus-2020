@@ -4,7 +4,6 @@
 #include "set.h"
 
 void create_set(set_t *set) {
-    set->block_queue = cola_crear();
     set->blocks_inserted = 0;
     set->blocks = calloc(NUMBER_BLOCKS_PER_SET, sizeof(block_t *));
     for (uint8_t i = 0; i < NUMBER_BLOCKS_PER_SET; i++) {
@@ -17,7 +16,6 @@ void destroy_set(set_t *set) {
     if (set == NULL){
         return;
     }
-    cola_destruir(set->block_queue, NULL);
     for (uint8_t i = 0; i < NUMBER_BLOCKS_PER_SET; i++) {
         block_destroy(set->blocks[i]);
         free(set->blocks[i]);
@@ -28,8 +26,8 @@ void destroy_set(set_t *set) {
 void set_insert_block(set_t *set, block_t *block, int way, unsigned int tag) {
     block_copy(block, set->blocks[way], tag);
     block_validate(set->blocks[way]);
-    cola_encolar(set->block_queue, set->blocks[way]);
-    set->blocks_inserted ++;
+    block_set_used(block);
+    if(!set_is_full(set)) set->blocks_inserted ++;
 }
 
 void reset_set(set_t *set) {
@@ -38,13 +36,15 @@ void reset_set(set_t *set) {
     }
 }
 
-block_t* set_get_last_block(set_t *set) {
-    block_t *last = (block_t *) cola_ver_primero(set->block_queue);
-    cola_desencolar(set->block_queue);
-    if(last)
-        set->blocks_inserted --;
-    return last;
-}
+// block_t* set_get_least_used_block(set_t *set) {
+//     block_t* last = NULL;
+//     get_way_least_used_block(set);
+//     for (size_t i = 0; i < NUMBER_BLOCKS_PER_SET; i++) {
+//         if(set->blocks[i] != NULL) {
+    
+//         }
+//     }
+// }
 
 bool block_set_is_valid(set_t *set, unsigned int way) {
     return block_is_valid(set->blocks[way]);
@@ -52,7 +52,7 @@ bool block_set_is_valid(set_t *set, unsigned int way) {
 
 int search_block_position(set_t *set, uint8_t tag) {
     for (int i = 0; i < NUMBER_BLOCKS_PER_SET; i++) {
-        if (block_is_valid(set->blocks[i]) && block_get_tag(set->blocks[i]) == tag)
+        if (block_is_valid(set->blocks[i]) && block_get_tag(set->blocks[i]) == tag) 
             return i;
     }
     return -1; 
@@ -69,12 +69,22 @@ void set_write_block(set_t *set, unsigned int way, unsigned int offset, char val
     block_write_byte(set->blocks[way], offset, value);
 }
 
-int get_way_last_block(set_t* set) {
+int get_way_least_used_block(set_t* set) {
+    int way = 0;
+    int last_counter = set->blocks[0] != NULL ?  set->blocks[0]->lastused : -1;
     if (set->blocks_inserted < NUMBER_BLOCKS_PER_SET) {
-        return set->blocks_inserted++;
+        way = set->blocks_inserted - 1;
+    } else {
+        for (size_t i = 0; i < NUMBER_BLOCKS_PER_SET; i++) {
+            if(set->blocks[i] != NULL) {
+                if ( set->blocks[i]->lastused > last_counter) {
+                    last_counter = set->blocks[i]->lastused;
+                    way = i;
+                }
+            }
+        }
     }
-    block_t *last = (block_t *)cola_ver_primero(set->block_queue);
-    return search_block_position(set,last->tag);
+    return way;
 }
 
 bool set_is_full(set_t* set) {
