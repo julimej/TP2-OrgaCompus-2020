@@ -37,10 +37,8 @@ void set_reset(set_t *set) {
 }
 
 int set_get_block_position(set_t *set, uint8_t tag) {
-    // printf("Buscando tag %d\n", tag);
     for (int i = 0; i < NUMBER_BLOCKS_PER_SET; i++) {
         if (block_is_valid(set->blocks[i]) && block_get_tag(set->blocks[i]) == tag) {
-            // printf("block iter %d tag %d\n",i, block_get_tag(set->blocks[i]));
             return i;
         }
     }
@@ -83,7 +81,6 @@ void set_update_counters(set_t* set, unsigned int last_used) {
             } else {
                 block_add_not_used(set->blocks[i]);
             }
-            // printf("Bloque %d usado %d veces\n", i , set->blocks[i]->lastused);
         }
     }
 }
