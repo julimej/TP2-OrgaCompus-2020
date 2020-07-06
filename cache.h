@@ -45,14 +45,17 @@ unsigned int find_set(unsigned int address);
 unsigned int select_oldest(unsigned int setnum);
 
 /**
+ * devolver la vı́a en la que se encuentra almacenado el bloque co-
+ * rrespondiente a tag en el conjunto index, o -1 si ninguno de los tags
+ * coincide.
+ */
+int compare_tag(unsigned int tag, unsigned int set);
+
+/**
  * Lee el bloque blocknum de memoria y lo guarda en el conjunto y vı́a indicados 
  * en la memoria caché.
  */
 void read_tocache(unsigned int blocknum, unsigned int way, unsigned int set);
-
-/**
- */
-void write_tocache(unsigned int address, unsigned char c);
 
 /**
  * Busca el valor del byte correspondiente a la posición address en la caché; 

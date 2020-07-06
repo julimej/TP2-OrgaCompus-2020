@@ -76,7 +76,7 @@ int main(int argc, char *argv[]) {
   cache = calloc(1, sizeof(cache_t));
   memory_create(memory);
   create_cache(memory);
-  if (!process_argv(argc, argv, &verbose, &filename)) {a
+  if (!process_argv(argc, argv, &verbose, &filename)) {
     print_help();
     return EXIT_FAILURE;
   }
@@ -86,17 +86,14 @@ int main(int argc, char *argv[]) {
   else
     input = fopen(filename, "r");
 
-  if (!input)
-  {
+  if (!input) {
     fprintf(stderr,
             "ERROR: No se pudo abrir %s\n", filename);
     return EXIT_FAILURE;
   }
 
   char buffer[8192];
-  while (fgets(buffer, sizeof(buffer), input))
-  {
-    //size_t ptr = 0; //para que esta esto?
+  while (fgets(buffer, sizeof(buffer), input)) {
     unsigned int addr;
     unsigned char value;
     command_t cmd = input_process_line(buffer, &addr, &value);
@@ -110,7 +107,8 @@ int main(int argc, char *argv[]) {
     case CMD_R:
       if (verbose)
         printf("read addr %d\n", addr);
-      read_byte(addr);
+      unsigned char read = (unsigned char)read_byte(addr);
+      printf("read %d\n",read);
       break;
     case CMD_W:
       if (verbose)

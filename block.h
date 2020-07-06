@@ -1,6 +1,6 @@
 #ifndef BLOCK_H
 #define BLOCK_H
-#define BLOCK_SIZE 64
+#define BLOCK_SIZE 128
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -39,7 +39,7 @@ unsigned char block_read_byte(block_t *self, uint8_t position);
 /**
  * Funcion que escribe un byte en la posicion recibida 
 */
-void block_write_byte(block_t *self, char byte, uint8_t position);
+void block_write_byte(block_t *self, uint8_t position, char byte);
 
 /**
  * Funcion que resetea el bloque, setea todos los valores en 0
@@ -54,7 +54,7 @@ uint8_t block_get_tag(block_t *self);
 /**
  * Devuelve si el boque es valido
 */
-uint8_t block_is_valid(block_t *self);
+bool block_is_valid(block_t *self);
 
 /**
  * Agrega uno a last_used

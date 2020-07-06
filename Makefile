@@ -1,4 +1,4 @@
-CFLAGS := -ggdb -O2
+CFLAGS := -ggdb 
 CFLAGS += -std=c99 -Wall -Wextra -Wpedantic
 CC := gcc
 

@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "block.h"
-#define BLOCK_SIZE 64
+#define BLOCK_SIZE 128
 
 void block_create(block_t *self) {
     self->bytes = calloc(BLOCK_SIZE, sizeof(char));
@@ -14,8 +14,8 @@ void block_create(block_t *self) {
 void block_copy(block_t *self, block_t *other, uint8_t tag) {
     other->tag = tag;
     memcpy(other->bytes, self->bytes, BLOCK_SIZE);
-    self->valid = 1;
-    self->lastused = 0;
+    other->valid = 0;
+    other->lastused = 0;
 }
 
 void block_destroy(block_t *self) {
@@ -35,7 +35,7 @@ unsigned char block_read_byte(block_t *self, uint8_t position) {
     return self->bytes[position];
 }
 
-void block_write_byte(block_t *self, char byte, uint8_t position) {
+void block_write_byte(block_t *self, uint8_t position, char byte) {
     self->bytes[position] = byte;
 }
 
@@ -49,7 +49,7 @@ uint8_t block_get_tag(block_t *self) {
     return self->tag;
 }
 
-uint8_t block_is_valid(block_t *self) {
+bool block_is_valid(block_t *self) {
     return self->valid == 1;
 }
 

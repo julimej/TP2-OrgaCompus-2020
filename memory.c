@@ -21,12 +21,12 @@ void memory_destroy(memory_t *memory) {
 
 
 uint16_t get_block_number(unsigned int address) {
-    return (address >> 6);
+    return (address >> 7);
 }
 
 uint16_t get_block_offset(unsigned int address) {
-    uint16_t offset = (address << 10);
-    return offset >> 10;
+    uint16_t offset = (address << 9);
+    return offset >> 9;
 }
 
 void memory_write_byte(memory_t *memory, unsigned int address, unsigned char byte) {
