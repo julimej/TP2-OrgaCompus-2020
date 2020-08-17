@@ -87,7 +87,7 @@ bool read_addr(const char *buffer, size_t ptr, unsigned int *addr) {
 }
 
 bool read_addr_n_val(const char *buffer, size_t ptr, unsigned int *addr, 
-    unsigned char *value) {
+    int *value) {
     while (isspace(buffer[ptr])) ptr++;
     if (!buffer[ptr])
         return false;
@@ -106,7 +106,7 @@ bool read_addr_n_val(const char *buffer, size_t ptr, unsigned int *addr,
     return true;
 }
 
-command_t input_process_line(const char *buffer, unsigned int *addr, unsigned char *value)  {
+command_t input_process_line(const char *buffer, unsigned int *addr, int *value)  {
     size_t ptr = 0;
     command_t cmd = read_command(buffer, &ptr);
     switch(cmd) {

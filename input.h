@@ -11,6 +11,6 @@ typedef enum {
 } command_t;
 
 command_t input_process_line(const char *buffer, unsigned int *addr, 
-    unsigned char *value);
+    int *value);
 
 #endif // _INPUT_H_

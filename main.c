@@ -95,7 +95,7 @@ int main(int argc, char *argv[]) {
   char buffer[8192];
   while (fgets(buffer, sizeof(buffer), input)) {
     unsigned int addr;
-    unsigned char value;
+    int value;
     command_t cmd = input_process_line(buffer, &addr, &value);
     switch (cmd)
     {
@@ -111,6 +111,10 @@ int main(int argc, char *argv[]) {
       printf("read %d\n",read);
       break;
     case CMD_W:
+      if (value > 255 || value < 0) {
+        fprintf(stderr, "ERROR: No se pudo escribir el numero deseado debido a que no puede ser representado como unsigned char\n");
+        continue;
+      }
       if (verbose)
         printf("write value %d to addr %d\n", value, addr);
       write_byte(addr, value);
