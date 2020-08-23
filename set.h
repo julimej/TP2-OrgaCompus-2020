@@ -4,7 +4,6 @@
 #define NUMBER_BLOCK_INVALIDA (NUMBER_BLOCKS_PER_SET + 1)
 #include <stdint.h>
 #include "block.h"
-#include "cola.h"
 
 struct set {
   block_t **blocks;

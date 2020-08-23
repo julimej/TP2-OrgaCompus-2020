@@ -1,6 +1,6 @@
 #ifndef CACHE_H
 #define CACHE_H
-#define NUMBER_SETS 128
+#define NUMBER_SETS 8
 #define NUMBER_WAYS 4
 #include "memory.h"
 #include "set.h"

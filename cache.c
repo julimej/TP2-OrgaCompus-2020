@@ -14,7 +14,7 @@ void create_cache(memory_t *pri_mem){
 }
 
 /**********************************************************************
-    Get the 6th lastest bits. 2^6 = 128 = Block Size
+    Get the 7th lastest bits. 2^7 = 128 = Block Size
     So if we have:
     1010101010101010
     we want the bits inside "|"
@@ -47,7 +47,7 @@ unsigned int get_offset(unsigned int address) {
 ************************************************************************/
 unsigned int find_set(unsigned int address) {
     uint16_t set = (address << 6);
-    return set >> 7;
+    return set >> 13;
 }
 
 /**********************************************************************

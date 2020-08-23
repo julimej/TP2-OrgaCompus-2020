@@ -3,7 +3,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include "block.h"
-#define BLOCK_SIZE 128
 
 void block_create(block_t *self) {
     self->bytes = calloc(BLOCK_SIZE, sizeof(char));

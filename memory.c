@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include "memory.h"
-#define NUMBER_OF_BLOCKS 1024
-#define MEMORY_SIZE (1024*64)
+#define NUMBER_OF_BLOCKS 512
+#define MEMORY_SIZE (512*128)
 
 void memory_create(memory_t *memory) {
     memory->memory = calloc(MEMORY_SIZE,sizeof(char));
